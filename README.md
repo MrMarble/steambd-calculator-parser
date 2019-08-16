@@ -36,6 +36,6 @@ steamdb.getSteamDBProfile('76561198287455504')
         "hours_average": "4.5h",
         "account_age": "3.4", # years
         "url_steam": "https://steamcommunity.com/profiles/76561198287455504",
-        "url_stamdb": "https://steamdb.info/calculator/76561198287455504/"
+        "url_steamdb": "https://steamdb.info/calculator/76561198287455504/"
     }
 ```
