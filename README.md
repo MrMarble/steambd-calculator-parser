@@ -1,6 +1,11 @@
 # SteamDB Calculator Parser
 Simple Python package to parse steamdb.info/calculator/\<steam-id>/
 
+### How to install
+
+You can install this package using pip
+`pip install git+https://github.com/MrMarble/steambd-calculator-parser`
+
 ### Usage
 
 ```python
