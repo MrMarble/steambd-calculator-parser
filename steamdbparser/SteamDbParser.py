@@ -40,7 +40,7 @@ class parser(object):
                 "hours_average": string,
                 "account_age": string,
                 "url_steam": string,
-                "url_stamdb": string
+                "url_steamdb": string
             }
         Arguments:
             steamId {string} -- Numeric Steam profile ID
@@ -66,7 +66,7 @@ class parser(object):
             "hours_average": None,
             "account_age": None,
             "url_steam": f'http://steamcommunity.com/profiles/{steamId}',
-            "url_stamdb": steamDBUrl
+            "url_steamdb": steamDBUrl
         }
         try:
             logging.info(f'Requesting {steamDBUrl}')
@@ -97,6 +97,11 @@ class parser(object):
                         'ul.player-info span.friendPlayerLevel')
                     if player_level:
                         profile['level'] = player_level.string
+                    else:  # Sometimes the layout is broken
+                        player_level = header.select_one(
+                            'ul.player-info > li:first-child span.number')
+                        if player_level:
+                            profile['level'] = player_level.string
                 except Exception:
                     logging.exception('Error getting profile level')
 
@@ -111,7 +116,7 @@ class parser(object):
                 try:
                     price = header.select_one('div.prices span.number-price')
                     if price:
-                        profile['price_lowest'] = price.string # Class name is wrong in steamdb.info
+                        profile['price_lowest'] = price.string  # Class name is wrong in steamdb.info
                 except Exception:
                     logging.exception('Error getting profile games price')
 
@@ -119,7 +124,7 @@ class parser(object):
                     price_lowest = header.select_one(
                         'div.prices span.number-price-lowest')
                     if price_lowest:
-                        profile['price'] = price_lowest.string # Class name is wrong in steamdb.info
+                        profile['price'] = price_lowest.string  # Class name is wrong in steamdb.info
                 except Exception:
                     logging.exception(
                         'Error getting profile games lowest price')
@@ -179,7 +184,8 @@ class parser(object):
                         'div.body-content > .container .tab-content #info > div:first-of-type .span6:first-child table tr:first-child .span2')
                     if vanity_url and vanity_url.string is 'Vanity URL':
                         profile['vanity_url'] = header.select_one(
-                            'div.body-content > .container .tab-content #info > div:first-of-type .span6:first-child table tr:first-child a')['href']
+                            'div.body-content > .container .tab-content #info > div:first-of-type .span6:first-child table tr:first-child a')[
+                            'href']
                 except Exception:
                     logging.exception(
                         'Error getting profile vanity url')
