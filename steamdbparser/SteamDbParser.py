@@ -72,7 +72,7 @@ class parser(object):
             logging.info(f'Requesting {steamDBUrl}')
             r = requests.get(
                 steamDBUrl, headers=self.__headers, timeout=(3, 10))
-            if r.status_code is 200:
+            if r.status_code == 200:
                 logging.info('Request completed')
                 soup = BeautifulSoup(r.text, 'html.parser')
 
@@ -182,7 +182,7 @@ class parser(object):
                 try:
                     vanity_url = header.select_one(
                         'div.body-content > .container .tab-content #info > div:first-of-type .span6:first-child table tr:first-child .span2')
-                    if vanity_url and vanity_url.string is 'Vanity URL':
+                    if vanity_url and vanity_url.string == 'Vanity URL':
                         profile['vanity_url'] = header.select_one(
                             'div.body-content > .container .tab-content #info > div:first-of-type .span6:first-child table tr:first-child a')[
                             'href']
