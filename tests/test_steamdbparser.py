@@ -4,7 +4,7 @@ import random
 from steamdbparser import SteamDbParser
 
 def random_string(length):
-    lettes = string.ascii_letters
+    letters = string.ascii_letters
     return ''.join(random.choice(letters) for i in range(length)) 
 
 def test_issteamid():
