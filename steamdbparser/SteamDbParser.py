@@ -20,7 +20,7 @@ class parser(object):
         Arguments:
             steamId {string|number} -- Steam ID to check
         """
-        return (len(steamId) == 17 and steamId.isdigit())
+        return (len(str(steamId)) == 17 and str(steamId).isdigit())
 
     def getSteamDBProfile(self, steamId):
         """Returns an object with the information o a Steam Profile.
