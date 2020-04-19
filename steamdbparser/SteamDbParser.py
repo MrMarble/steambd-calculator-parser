@@ -1,12 +1,12 @@
-import json
 import logging
-import os
+
 import requests
 from bs4 import BeautifulSoup
 
 
 class parser(object):
-    def __init__(self):
+    def __init__(self, currency='us'):
+        self.currency = currency
         self.__headers = {
             'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101 Firefox/68.0'
         }
@@ -49,7 +49,7 @@ class parser(object):
             logging.error(f'{steamId} is not a valid Steam Profile ID')
             raise ValueError
 
-        steamDBUrl = f'https://steamdb.info/calculator/{steamId}'
+        steamDBUrl = f'https://steamdb.info/calculator/{steamId}/?cc={self.currency}'
         profile = {
             "display_name": None,
             "avatar": None,
@@ -78,6 +78,7 @@ class parser(object):
 
                 # Stracting header info first
                 header = soup.find('div', 'calculator-wrapper')
+                body = soup.select_one('div.container > div.tabbable > div.tab-content')
                 try:
                     avatar = header.select_one('img.avatar')
                     if avatar:
@@ -95,7 +96,7 @@ class parser(object):
                 try:
                     player_level = header.select_one(
                         'ul.player-info span.friendPlayerLevel')
-                    if player_level:
+                    if player_level.string:
                         profile['level'] = player_level.string
                     else:  # Sometimes the layout is broken
                         player_level = header.select_one(
@@ -109,6 +110,10 @@ class parser(object):
                     account_age = header.select_one(
                         'ul.player-info > li:nth-child(2) span.number')
                     if account_age:
+                        profile['account_age'] = account_age.string
+                    else:
+                        account_age = header.select_one(
+                            'ul.player-info > li:nth-child(3) span.number')
                         profile['account_age'] = account_age.string
                 except Exception:
                     logging.exception('Error getting profile age')
@@ -180,10 +185,10 @@ class parser(object):
                     logging.exception(
                         'Error getting profile average hours')
                 try:
-                    vanity_url = header.select_one(
+                    vanity_url = body.select_one(
                         'div.body-content > .container .tab-content #info > div:first-of-type .span6:first-child table tr:first-child .span2')
                     if vanity_url and vanity_url.string == 'Vanity URL':
-                        profile['vanity_url'] = header.select_one(
+                        profile['vanity_url'] = body.select_one(
                             'div.body-content > .container .tab-content #info > div:first-of-type .span6:first-child table tr:first-child a')[
                             'href']
                 except Exception:
