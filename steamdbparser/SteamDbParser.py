@@ -20,7 +20,7 @@ class parser(object):
         Arguments:
             steamId {string|number} -- Steam ID to check
         """
-        return (len(str(steamId)) == 17 and str(steamId).isdigit())
+        return len(str(steamId)) == 17 and str(steamId).isdigit()
 
     def getSteamDBProfile(self, steamId):
         """Returns an object with the information o a Steam Profile.
@@ -121,7 +121,7 @@ class parser(object):
                 try:
                     price = header.select_one('div.prices span.number-price')
                     if price:
-                        profile['price_lowest'] = price.string  # Class name is wrong in steamdb.info
+                        profile['price_lowest'] = price.contents[1]  # Class name is wrong in steamdb.info
                 except Exception:
                     logging.exception('Error getting profile games price')
 
@@ -129,7 +129,7 @@ class parser(object):
                     price_lowest = header.select_one(
                         'div.prices span.number-price-lowest')
                     if price_lowest:
-                        profile['price'] = price_lowest.string  # Class name is wrong in steamdb.info
+                        profile['price'] = price_lowest.contents[1]  # Class name is wrong in steamdb.info
                 except Exception:
                     logging.exception(
                         'Error getting profile games lowest price')
@@ -155,7 +155,7 @@ class parser(object):
                     price_average = header.select_one(
                         'div.wrapper-info .row-stats .span3:first-child b')
                     if price_average:
-                        profile['price_average'] = price_average.string
+                        profile['price_average'] = price_average.contents[1]
                 except Exception:
                     logging.exception(
                         'Error getting profile game average price')
@@ -163,7 +163,7 @@ class parser(object):
                     price_hour = header.select_one(
                         'div.wrapper-info .row-stats .span3:nth-child(2) b')
                     if price_hour:
-                        profile['price_hour'] = price_hour.string
+                        profile['price_hour'] = price_hour.contents[1]
                 except Exception:
                     logging.exception(
                         'Error getting profile game price per hour')
