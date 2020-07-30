@@ -8,7 +8,7 @@ class parser(object):
     def __init__(self, currency='us'):
         self.currency = currency
         self.__headers = {
-            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101 Firefox/68.0'
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0'
         }
         logging.info(
             'New instance of SteamDB Profile Parser has been instanciated'
