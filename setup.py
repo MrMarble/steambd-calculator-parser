@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="steamdb-parser-mrmarble",
-    version="0.0.3",
+    version="0.0.4",
     author="MrMarble",
     description="Simple packate to parse a steamdb Profile",
     long_description=long_description,
