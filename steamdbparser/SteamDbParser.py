@@ -8,7 +8,11 @@ class parser(object):
     def __init__(self, currency='us'):
         self.currency = currency
         self.__headers = {
-            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101 Firefox/68.0'
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0'
+        }
+        self.__coockies = {
+            '__cfduid': 'd77adbe328885aee05072232ec73855331596220238',
+            'cf_clearance': '315221500f921ed43e8ec09140690fb2bd9652bb-1596616462-0-1zb8734ebeze289d08aza6981dc5-250'
         }
         logging.info(
             'New instance of SteamDB Profile Parser has been instanciated'
@@ -199,3 +203,8 @@ class parser(object):
                 'Something bad happend when fetching profile info')
         finally:
             return profile
+
+
+if __name__ == '__main__':
+    steam = parser()
+    profile = steam.getSteamDBProfile('76561198287455504')
