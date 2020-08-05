@@ -10,7 +10,7 @@ class parser(object):
         self.__headers = {
             'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0'
         }
-        self.__coockies = {
+        self.__cookies = {
             '__cfduid': 'd77adbe328885aee05072232ec73855331596220238',
             'cf_clearance': '315221500f921ed43e8ec09140690fb2bd9652bb-1596616462-0-1zb8734ebeze289d08aza6981dc5-250'
         }
@@ -75,7 +75,7 @@ class parser(object):
         try:
             logging.info(f'Requesting {steamDBUrl}')
             r = requests.get(
-                steamDBUrl, headers=self.__headers, timeout=(3, 10))
+                steamDBUrl, headers=self.__headers, cookies=self.__cookies, timeout=(3, 10))
             if r.status_code == 200:
                 logging.info('Request completed')
                 soup = BeautifulSoup(r.text, 'html.parser')
