@@ -4,16 +4,15 @@ import requests
 from bs4 import BeautifulSoup
 
 
-class parser(object):
-    def __init__(self, currency='us'):
+class Parser(object):
+    baseurl = 'https://steamdb.info/calculator/'
+
+    def __init__(self, currency='us', cookies={}):
         self.currency = currency
         self.__headers = {
             'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0'
         }
-        self.__cookies = {
-            '__cfduid': 'd77adbe328885aee05072232ec73855331596220238',
-            'cf_clearance': '315221500f921ed43e8ec09140690fb2bd9652bb-1596616462-0-1zb8734ebeze289d08aza6981dc5-250'
-        }
+        self.__cookies = cookies
         logging.info(
             'New instance of SteamDB Profile Parser has been instanciated'
         )
@@ -25,6 +24,15 @@ class parser(object):
             steamId {string|number} -- Steam ID to check
         """
         return len(str(steamId)) == 17 and str(steamId).isdigit()
+
+    def canConnect(self):
+        """Checks if SteamDbParser can connect to steamdb.info
+
+        Returns:
+            Bool: Wherver it can connect or not
+        """
+        r = requests.get(self.baseurl)
+        return r.status_code == 200
 
     def getSteamDBProfile(self, steamId):
         """Returns an object with the information o a Steam Profile.
@@ -82,7 +90,8 @@ class parser(object):
 
                 # Stracting header info first
                 header = soup.find('div', 'calculator-wrapper')
-                body = soup.select_one('div.container > div.tabbable > div.tab-content')
+                body = soup.select_one(
+                    'div.container > div.tabbable > div.tab-content')
                 try:
                     avatar = header.select_one('img.avatar')
                     if avatar:
@@ -125,7 +134,8 @@ class parser(object):
                 try:
                     price = header.select_one('div.prices span.number-price')
                     if price:
-                        profile['price_lowest'] = price.contents[1]  # Class name is wrong in steamdb.info
+                        # Class name is wrong in steamdb.info
+                        profile['price_lowest'] = price.contents[1]
                 except Exception:
                     logging.exception('Error getting profile games price')
 
@@ -133,7 +143,8 @@ class parser(object):
                     price_lowest = header.select_one(
                         'div.prices span.number-price-lowest')
                     if price_lowest:
-                        profile['price'] = price_lowest.contents[1]  # Class name is wrong in steamdb.info
+                        # Class name is wrong in steamdb.info
+                        profile['price'] = price_lowest.contents[1]
                 except Exception:
                     logging.exception(
                         'Error getting profile games lowest price')
@@ -206,5 +217,5 @@ class parser(object):
 
 
 if __name__ == '__main__':
-    steam = parser()
+    steam = Parser()
     profile = steam.getSteamDBProfile('76561198287455504')

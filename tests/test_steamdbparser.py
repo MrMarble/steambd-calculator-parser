@@ -10,7 +10,7 @@ def random_string(length):
 
 
 def test_issteamid():
-    steam = SteamDbParser.parser()
+    steam = SteamDbParser.Parser()
 
     assert steam.isSteamId(76561198287455504) is True  # My SteamID
     assert steam.isSteamId('76561198287455504') is True
@@ -20,3 +20,19 @@ def test_issteamid():
     assert steam.isSteamId(1) is False
     for i in range(10):
         assert steam.isSteamId(random_string(random.randint(0, 20))) is False
+
+def test_canConnect():
+    steam = SteamDbParser.Parser()
+    canConnect = steam.canConnect()
+    assert canConnect is True
+
+def test_updateCookies():
+    steam = SteamDbParser.Parser()
+    steam.updateCookies()
+    assert steam.canConnect() == True
+
+def test_steamdb():
+        steam = SteamDbParser.Parser()
+        account = steam.getSteamDBProfile(76561198287455504)
+        for key, value in account.items():
+            assert key == key and value is not None
