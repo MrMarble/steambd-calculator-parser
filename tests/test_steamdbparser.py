@@ -21,18 +21,15 @@ def test_issteamid():
     for i in range(10):
         assert steam.isSteamId(random_string(random.randint(0, 20))) is False
 
+def test_steamdb():
+        steam = SteamDbParser.Parser()
+        account = steam.getSteamDBProfile(76561198057850335)
+        assert type(account) is dict
+        for key, value in account.items():
+            print(value)
+            assert (key == key and value is not None)
+
 def test_canConnect():
     steam = SteamDbParser.Parser()
     canConnect = steam.canConnect()
     assert canConnect is True
-
-def test_updateCookies():
-    steam = SteamDbParser.Parser()
-    steam.updateCookies()
-    assert steam.canConnect() == True
-
-def test_steamdb():
-        steam = SteamDbParser.Parser()
-        account = steam.getSteamDBProfile(76561198287455504)
-        for key, value in account.items():
-            assert key == key and value is not None

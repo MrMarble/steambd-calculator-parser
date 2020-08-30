@@ -25,14 +25,21 @@ class Parser(object):
         """
         return len(str(steamId)) == 17 and str(steamId).isdigit()
 
-    def canConnect(self):
+    def canConnect(self, tries=3):
         """Checks if SteamDbParser can connect to steamdb.info
 
         Returns:
             Bool: Wherver it can connect or not
         """
-        r = requests.get(self.baseurl)
-        return r.status_code == 200
+        if tries > 0:
+            r = requests.get(self.baseurl, headers=self.__headers, cookies=self.__cookies)
+            can = r.status_code == 200
+            if not can:
+                can = 'Get disappointed in your life' in r.text
+            if not can:
+                return self.canConnect(tries - 1)
+            return True
+        return False
 
     def getSteamDBProfile(self, steamId):
         """Returns an object with the information o a Steam Profile.
@@ -61,7 +68,7 @@ class Parser(object):
             logging.error(f'{steamId} is not a valid Steam Profile ID')
             raise ValueError
 
-        steamDBUrl = f'https://steamdb.info/calculator/{steamId}/?cc={self.currency}'
+        steamDBUrl = f'{self.baseurl}{steamId}/?cc={self.currency}'
         profile = {
             "display_name": None,
             "avatar": None,
