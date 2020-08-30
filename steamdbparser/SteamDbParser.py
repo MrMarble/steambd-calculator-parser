@@ -10,7 +10,7 @@ class Parser(object):
     def __init__(self, currency='us', cookies={}):
         self.currency = currency
         self.__headers = {
-            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0'
+            'user-agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:80.0) Gecko/20100101 Firefox/80.0'
         }
         self.__cookies = cookies
         logging.info(
